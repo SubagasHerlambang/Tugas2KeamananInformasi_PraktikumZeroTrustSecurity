@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/admin"
+method: GET
+headers:
+  Authorization: Bearer {{tokAdmin}}
+  X-Device-ID: DEV-ADMIN-001
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: pm.test('HTTP 404', () => pm.response.to.have.status(404));
+    language: text/javascript
+order: 1000

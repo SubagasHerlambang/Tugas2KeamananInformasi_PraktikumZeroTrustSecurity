@@ -1,0 +1,1050 @@
+
+> securecampus@1.0.0 test
+> node --test --test-concurrency=1 "tests/unit/*.test.js" "tests/integration/*.test.js" "tests/security/*.test.js"
+
+TAP version 13
+# (node:1035) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: TC-LOG-01 / AC-15 audit allow & deny memuat waktu, subjek, endpoint, device, hasil, alasan (+ request id, method, status, ip)
+ok 1 - TC-LOG-01 / AC-15 audit allow & deny memuat waktu, subjek, endpoint, device, hasil, alasan (+ request id, method, status, ip)
+  ---
+  duration_ms: 202.197081
+  type: 'test'
+  ...
+# Subtest: audit mencatat subjek service, login sukses/gagal, logout, refresh, dan route tak dikenal
+ok 2 - audit mencatat subjek service, login sukses/gagal, logout, refresh, dan route tak dikenal
+  ---
+  duration_ms: 53.671823
+  type: 'test'
+  ...
+# Subtest: request tanpa identitas tetap menghasilkan audit event dengan subject unknown/anonymous (PRD 14.2)
+ok 3 - request tanpa identitas tetap menghasilkan audit event dengan subject unknown/anonymous (PRD 14.2)
+  ---
+  duration_ms: 5.033443
+  type: 'test'
+  ...
+# Subtest: TC-LOG-02 / AC-16 tidak ada password, token, refresh token, client secret, atau gateway secret di audit log maupun respons error
+ok 4 - TC-LOG-02 / AC-16 tidak ada password, token, refresh token, client secret, atau gateway secret di audit log maupun respons error
+  ---
+  duration_ms: 50.965718
+  type: 'test'
+  ...
+# Subtest: audit endpoint tidak menyimpan query string; device_id disanitasi
+ok 5 - audit endpoint tidak menyimpan query string; device_id disanitasi
+  ---
+  duration_ms: 25.471714
+  type: 'test'
+  ...
+# Subtest: audit log append-only dari sisi aplikasi: baris tidak dapat dihapus/diubah
+ok 6 - audit log append-only dari sisi aplikasi: baris tidak dapat dihapus/diubah
+  ---
+  duration_ms: 1.183152
+  type: 'test'
+  ...
+# Subtest: fail-closed: bila audit tidak dapat ditulis, request ALLOW tidak diteruskan (500), deny tetap deny
+ok 7 - fail-closed: bila audit tidak dapat ditulis, request ALLOW tidak diteruskan (500), deny tetap deny
+  ---
+  duration_ms: 33.597138
+  type: 'test'
+  ...
+# Subtest: NFR-SEC-04 error 404/405/400/500 berformat konsisten tanpa stack trace
+ok 8 - NFR-SEC-04 error 404/405/400/500 berformat konsisten tanpa stack trace
+  ---
+  duration_ms: 41.028446
+  type: 'test'
+  ...
+# Subtest: TC-AUTH-01 login valid: access token 10m (600s), refresh 1d (86400s), claim sub+role
+ok 9 - TC-AUTH-01 login valid: access token 10m (600s), refresh 1d (86400s), claim sub+role
+  ---
+  duration_ms: 156.679144
+  type: 'test'
+  ...
+# Subtest: AC-05 refresh token tersimpan sebagai HASH (bukan mentah), expiry tepat 1 hari dari waktu clock
+ok 10 - AC-05 refresh token tersimpan sebagai HASH (bukan mentah), expiry tepat 1 hari dari waktu clock
+  ---
+  duration_ms: 10.284761
+  type: 'test'
+  ...
+# Subtest: TC-AUTH-02 password salah dan user tak dikenal: 401 generik, identik, tanpa token
+ok 11 - TC-AUTH-02 password salah dan user tak dikenal: 401 generik, identik, tanpa token
+  ---
+  duration_ms: 55.692161
+  type: 'test'
+  ...
+# Subtest: TC-AUTH-03 device tidak terdaftar: login ditolak 403 DEVICE_NOT_REGISTERED, tanpa token
+ok 12 - TC-AUTH-03 device tidak terdaftar: login ditolak 403 DEVICE_NOT_REGISTERED, tanpa token
+  ---
+  duration_ms: 16.660432
+  type: 'test'
+  ...
+# Subtest: TC-AUTH-04 device milik user lain ditolak saat login
+ok 13 - TC-AUTH-04 device milik user lain ditolak saat login
+  ---
+  duration_ms: 7.014478
+  type: 'test'
+  ...
+# Subtest: login: akun nonaktif dan device nonaktif ditolak
+ok 14 - login: akun nonaktif dan device nonaktif ditolak
+  ---
+  duration_ms: 22.124959
+  type: 'test'
+  ...
+# Subtest: login: body tidak valid -> 400 VALIDATION_ERROR (tipe salah, field kosong, JSON rusak, field ekstra)
+ok 15 - login: body tidak valid -> 400 VALIDATION_ERROR (tipe salah, field kosong, JSON rusak, field ekstra)
+  ---
+  duration_ms: 22.380019
+  type: 'test'
+  ...
+# Subtest: TC-AUTH-05 request bisnis: tanpa token 401 AUTH_REQUIRED; token rusak/expired/tanda tangan salah 401
+ok 16 - TC-AUTH-05 request bisnis: tanpa token 401 AUTH_REQUIRED; token rusak/expired/tanda tangan salah 401
+  ---
+  duration_ms: 23.951102
+  type: 'test'
+  ...
+# (node:1043) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: AC-07 device: tanpa header / device milik user lain / device tak dikenal -> 403 sebelum resource diproses
+ok 17 - AC-07 device: tanpa header / device milik user lain / device tak dikenal -> 403 sebelum resource diproses
+  ---
+  duration_ms: 47.793057
+  type: 'test'
+  ...
+# Subtest: refresh: sukses menerbitkan access token baru, rotasi mencabut token lama, expiry mutlak tidak diperpanjang
+ok 18 - refresh: sukses menerbitkan access token baru, rotasi mencabut token lama, expiry mutlak tidak diperpanjang
+  ---
+  duration_ms: 19.336664
+  type: 'test'
+  ...
+# Subtest: TC-AUTH-06 logout mencabut refresh token di DB; refresh sesudah logout ditolak; logout idempoten
+ok 19 - TC-AUTH-06 logout mencabut refresh token di DB; refresh sesudah logout ditolak; logout idempoten
+  ---
+  duration_ms: 12.782085
+  type: 'test'
+  ...
+# Subtest: refresh kedaluwarsa (clock +1 hari) ditolak TOKEN_EXPIRED; refresh tidak dikenal / body salah ditolak
+ok 20 - refresh kedaluwarsa (clock +1 hari) ditolak TOKEN_EXPIRED; refresh tidak dikenal / body salah ditolak
+  ---
+  duration_ms: 11.307178
+  type: 'test'
+  ...
+# Subtest: refresh: X-Device-ID yang tidak cocok dengan sesi ditolak 403
+ok 21 - refresh: X-Device-ID yang tidak cocok dengan sesi ditolak 403
+  ---
+  duration_ms: 12.523473
+  type: 'test'
+  ...
+# Subtest: TC-SVC-01 token service: role=service, exp 5 menit (300s)
+ok 22 - TC-SVC-01 token service: role=service, exp 5 menit (300s)
+  ---
+  duration_ms: 6.93448
+  type: 'test'
+  ...
+# Subtest: TC-SVC-02 token service: secret salah / client salah / body salah -> tidak ada token
+ok 23 - TC-SVC-02 token service: secret salah / client salah / body salah -> tidak ada token
+  ---
+  duration_ms: 36.526257
+  type: 'test'
+  ...
+# Subtest: user login tidak dapat memakai /auth/service dan sebaliknya (kredensial terpisah)
+ok 24 - user login tidak dapat memakai /auth/service dan sebaliknya (kredensial terpisah)
+  ---
+  duration_ms: 25.05447
+  type: 'test'
+  ...
+# (node:1051) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: TC-FIN-01 finalisasi valid: sinkron via gateway + token service, nilai final, transkrip published & terbaca
+ok 25 - TC-FIN-01 finalisasi valid: sinkron via gateway + token service, nilai final, transkrip published & terbaca
+  ---
+  duration_ms: 278.332614
+  type: 'test'
+  ...
+# Subtest: setelah finalisasi, edit nilai ditolak (final immutable) dan finalisasi ulang -> 409
+ok 26 - setelah finalisasi, edit nilai ditolak (final immutable) dan finalisasi ulang -> 409
+  ---
+  duration_ms: 94.768453
+  type: 'test'
+  ...
+# Subtest: TC-FIN-02 finalisasi kelas bukan miliknya -> 403 CLASS_NOT_OWNED, tidak ada transkrip dibuat
+ok 27 - TC-FIN-02 finalisasi kelas bukan miliknya -> 403 CLASS_NOT_OWNED, tidak ada transkrip dibuat
+  ---
+  duration_ms: 42.657498
+  type: 'test'
+  ...
+# Subtest: finalisasi oleh admin/mahasiswa ditolak; kelas tidak ada -> 404; ID rusak -> 400
+ok 28 - finalisasi oleh admin/mahasiswa ditolak; kelas tidak ada -> 404; ID rusak -> 400
+  ---
+  duration_ms: 49.687814
+  type: 'test'
+  ...
+# Subtest: finalisasi di luar jam akses -> 403 OUT_OF_ACCESS_HOURS; di dalam jam -> 200
+ok 29 - finalisasi di luar jam akses -> 403 OUT_OF_ACCESS_HOURS; di dalam jam -> 200
+  ---
+  duration_ms: 64.859171
+  type: 'test'
+  ...
+# Subtest: kelas tidak lengkap (mahasiswa terdaftar tanpa nilai) -> 422 CLASS_INCOMPLETE dan tidak ada yang berubah
+ok 30 - kelas tidak lengkap (mahasiswa terdaftar tanpa nilai) -> 422 CLASS_INCOMPLETE dan tidak ada yang berubah
+  ---
+  duration_ms: 38.768445
+  type: 'test'
+  ...
+# Subtest: TC-FIN-03 Service Transkrip tidak tersedia -> 502, TIDAK dilaporkan sukses, status sync_failed, pending tidak terlihat, gagal tercatat
+ok 31 - TC-FIN-03 Service Transkrip tidak tersedia -> 502, TIDAK dilaporkan sukses, status sync_failed, pending tidak terlihat, gagal tercatat
+  ---
+  duration_ms: 68.120267
+  type: 'test'
+  ...
+# Subtest: TC-FIN-04 retry setelah pemulihan: sukses, tidak ada entri duplikat, pending menjadi published
+ok 32 - TC-FIN-04 retry setelah pemulihan: sukses, tidak ada entri duplikat, pending menjadi published
+  ---
+  duration_ms: 111.930221
+  type: 'test'
+  ...
+# Subtest: kegagalan parsial: sinkron sebagian sukses lalu gagal -> tidak ada yang final, entri pending tersembunyi, retry menyelesaikan tanpa duplikasi
+ok 33 - kegagalan parsial: sinkron sebagian sukses lalu gagal -> tidak ada yang final, entri pending tersembunyi, retry menyelesaikan tanpa duplikasi
+  ---
+  duration_ms: 112.451758
+  type: 'test'
+  ...
+# Subtest: edit nilai setelah sync_failed diizinkan (belum final) dan versi baru tersinkron pada retry
+ok 34 - edit nilai setelah sync_failed diizinkan (belum final) dan versi baru tersinkron pada retry
+  ---
+  duration_ms: 70.440463
+  type: 'test'
+  ...
+# Subtest: finalisasi serentak (dua request paralel): tepat satu sukses, tidak ada duplikasi transkrip
+ok 35 - finalisasi serentak (dua request paralel): tepat satu sukses, tidak ada duplikasi transkrip
+  ---
+  duration_ms: 66.033965
+  type: 'test'
+  ...
+# Subtest: kunci finalizing yang basi (proses mati) dilepas dan dapat dicoba ulang
+ok 36 - kunci finalizing yang basi (proses mati) dilepas dan dapat dicoba ulang
+  ---
+  duration_ms: 59.113232
+  type: 'test'
+  ...
+# Subtest: kunci finalizing yang masih baru -> 409 FINALIZATION_IN_PROGRESS
+ok 37 - kunci finalizing yang masih baru -> 409 FINALIZATION_IN_PROGRESS
+  ---
+  duration_ms: 43.091048
+  type: 'test'
+  ...
+# Subtest: finalisasi menolak body tidak dikenal; body kosong/{} diterima
+ok 38 - finalisasi menolak body tidak dikenal; body kosong/{} diterima
+  ---
+  duration_ms: 59.338052
+  type: 'test'
+  ...
+# (node:1059) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: TC-VAL-01 mahasiswa melihat HANYA nilai miliknya
+ok 39 - TC-VAL-01 mahasiswa melihat HANYA nilai miliknya
+  ---
+  duration_ms: 221.191384
+  type: 'test'
+  ...
+# Subtest: TC-VAL-02 mahasiswa tidak dapat memakai query/parameter untuk membaca data mahasiswa lain
+ok 40 - TC-VAL-02 mahasiswa tidak dapat memakai query/parameter untuk membaca data mahasiswa lain
+  ---
+  duration_ms: 9.656908
+  type: 'test'
+  ...
+# Subtest: GET /nilai: draft internal (finalizing/sync_failed) tidak terlihat sebagai status internal oleh mahasiswa
+ok 41 - GET /nilai: draft internal (finalizing/sync_failed) tidak terlihat sebagai status internal oleh mahasiswa
+  ---
+  duration_ms: 16.465733
+  type: 'test'
+  ...
+# Subtest: TC-VAL-03 dosen melihat HANYA kelas yang diampu (+ metadata jam akses)
+ok 42 - TC-VAL-03 dosen melihat HANYA kelas yang diampu (+ metadata jam akses)
+  ---
+  duration_ms: 10.422615
+  type: 'test'
+  ...
+# Subtest: admin tidak diizinkan GET /nilai (sesuai matriks endpoint tugas)
+ok 43 - admin tidak diizinkan GET /nilai (sesuai matriks endpoint tugas)
+  ---
+  duration_ms: 3.422231
+  type: 'test'
+  ...
+# Subtest: TC-VAL-05 edit nilai valid: dosen pengampu, draft, dalam jam akses -> 200, versi naik, DB berubah
+ok 44 - TC-VAL-05 edit nilai valid: dosen pengampu, draft, dalam jam akses -> 200, versi naik, DB berubah
+  ---
+  duration_ms: 7.509002
+  type: 'test'
+  ...
+# Subtest: TC-VAL-04 dosen mengakses nilai di kelas lain: 403 CLASS_NOT_OWNED, data tidak berubah
+ok 45 - TC-VAL-04 dosen mengakses nilai di kelas lain: 403 CLASS_NOT_OWNED, data tidak berubah
+  ---
+  duration_ms: 9.9916
+  type: 'test'
+  ...
+# Subtest: PUT nilai oleh mahasiswa / admin ditolak; admin tidak punya hak edit implisit
+ok 46 - PUT nilai oleh mahasiswa / admin ditolak; admin tidak punya hak edit implisit
+  ---
+  duration_ms: 6.410547
+  type: 'test'
+  ...
+# Subtest: PUT nilai tidak ada -> 404 RESOURCE_NOT_FOUND
+ok 47 - PUT nilai tidak ada -> 404 RESOURCE_NOT_FOUND
+  ---
+  duration_ms: 4.635317
+  type: 'test'
+  ...
+# Subtest: TC-VAL-06 edit nilai final -> 409 GRADE_FINAL dan skor tidak berubah
+ok 48 - TC-VAL-06 edit nilai final -> 409 GRADE_FINAL dan skor tidak berubah
+  ---
+  duration_ms: 3.813631
+  type: 'test'
+  ...
+# Subtest: PUT nilai saat finalisasi berjalan (status finalizing) -> 409 konflik
+ok 49 - PUT nilai saat finalisasi berjalan (status finalizing) -> 409 konflik
+  ---
+  duration_ms: 3.563758
+  type: 'test'
+  ...
+# Subtest: TC-VAL-07 batas jam akses 07:00-21:00 WIB: 06:59, 07:00, 20:59, 21:00, 21:01
+ok 50 - TC-VAL-07 batas jam akses 07:00-21:00 WIB: 06:59, 07:00, 20:59, 21:00, 21:01
+  ---
+  duration_ms: 41.017873
+  type: 'test'
+  ...
+# Subtest: jam akses dapat dikonfigurasi lewat environment (jendela sempit untuk demo)
+ok 51 - jam akses dapat dikonfigurasi lewat environment (jendela sempit untuk demo)
+  ---
+  duration_ms: 27.784651
+  type: 'test'
+  ...
+# Subtest: TC-IN-01 skor invalid ditolak 400 dan DB tidak berubah (string, negatif, >100, NaN/null, field ekstra, body kosong)
+ok 52 - TC-IN-01 skor invalid ditolak 400 dan DB tidak berubah (string, negatif, >100, NaN/null, field ekstra, body kosong)
+  ---
+  duration_ms: 36.693221
+  type: 'test'
+  ...
+# Subtest: batas skor 0 dan 100 diterima; desimal diterima
+ok 53 - batas skor 0 dan 100 diterima; desimal diterima
+  ---
+  duration_ms: 20.676957
+  type: 'test'
+  ...
+# Subtest: request ID konsisten: header X-Request-ID = request_id di error = request_id di audit
+ok 54 - request ID konsisten: header X-Request-ID = request_id di error = request_id di audit
+  ---
+  duration_ms: 4.385102
+  type: 'test'
+  ...
+# (node:1067) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: TC-TR-01 mahasiswa membaca transkrip sendiri: 200, hanya entri published miliknya
+ok 55 - TC-TR-01 mahasiswa membaca transkrip sendiri: 200, hanya entri published miliknya
+  ---
+  duration_ms: 251.564903
+  type: 'test'
+  ...
+# Subtest: TC-TR-02 mahasiswa membaca transkrip orang lain: 403 tanpa isi transkrip (IDOR)
+ok 56 - TC-TR-02 mahasiswa membaca transkrip orang lain: 403 tanpa isi transkrip (IDOR)
+  ---
+  duration_ms: 8.843676
+  type: 'test'
+  ...
+# Subtest: TC-TR-03 admin membaca transkrip semua NIM; NIM tidak ada -> 404; format salah -> 400
+ok 57 - TC-TR-03 admin membaca transkrip semua NIM; NIM tidak ada -> 404; format salah -> 400
+  ---
+  duration_ms: 27.257289
+  type: 'test'
+  ...
+# Subtest: dosen tidak berhak membaca transkrip (tidak dinyatakan di tugas -> default deny)
+ok 58 - dosen tidak berhak membaca transkrip (tidak dinyatakan di tugas -> default deny)
+  ---
+  duration_ms: 3.498331
+  type: 'test'
+  ...
+# Subtest: direktori transkrip (GET /transkrip) hanya admin
+ok 59 - direktori transkrip (GET /transkrip) hanya admin
+  ---
+  duration_ms: 17.204756
+  type: 'test'
+  ...
+# Subtest: TC-TR-04 token user (mahasiswa/dosen/admin) ke /transkrip/sinkron -> 403 SERVICE_TOKEN_REQUIRED, tidak ada insert
+ok 60 - TC-TR-04 token user (mahasiswa/dosen/admin) ke /transkrip/sinkron -> 403 SERVICE_TOKEN_REQUIRED, tidak ada insert
+  ---
+  duration_ms: 8.689851
+  type: 'test'
+  ...
+# Subtest: sinkron tanpa token -> 401; token rusak -> 401
+ok 61 - sinkron tanpa token -> 401; token rusak -> 401
+  ---
+  duration_ms: 9.761425
+  type: 'test'
+  ...
+# Subtest: sinkron dengan token service valid: 201 pending; pending TIDAK tampil pada transkrip
+ok 62 - sinkron dengan token service valid: 201 pending; pending TIDAK tampil pada transkrip
+  ---
+  duration_ms: 33.61102
+  type: 'test'
+  ...
+# Subtest: TC-FIN-04 sinkron identik berulang: idempoten (200), tetap 1 entri
+ok 63 - TC-FIN-04 sinkron identik berulang: idempoten (200), tetap 1 entri
+  ---
+  duration_ms: 19.340569
+  type: 'test'
+  ...
+# Subtest: sinkron: Idempotency-Key yang tidak cocok dengan payload -> 400
+ok 64 - sinkron: Idempotency-Key yang tidak cocok dengan payload -> 400
+  ---
+  duration_ms: 7.210619
+  type: 'test'
+  ...
+# Subtest: sinkron memverifikasi payload terhadap DB: skor/versi tidak cocok -> 409; kelas/NIM tidak cocok -> 422; nilai tak ada -> 404
+ok 65 - sinkron memverifikasi payload terhadap DB: skor/versi tidak cocok -> 409; kelas/NIM tidak cocok -> 422; nilai tak ada -> 404
+  ---
+  duration_ms: 24.383839
+  type: 'test'
+  ...
+# Subtest: sinkron: payload invalid / field ekstra / body kosong -> 400 tanpa perubahan
+ok 66 - sinkron: payload invalid / field ekstra / body kosong -> 400 tanpa perubahan
+  ---
+  duration_ms: 32.633752
+  type: 'test'
+  ...
+# Subtest: entri published tidak dapat diubah lewat sinkron versi lain -> 409
+ok 67 - entri published tidak dapat diubah lewat sinkron versi lain -> 409
+  ---
+  duration_ms: 6.871343
+  type: 'test'
+  ...
+# Subtest: pembaruan entri pending dengan versi lebih baru memperbarui entri yang sama (tanpa duplikasi)
+ok 68 - pembaruan entri pending dengan versi lebih baru memperbarui entri yang sama (tanpa duplikasi)
+  ---
+  duration_ms: 5.82713
+  type: 'test'
+  ...
+# Subtest: token service TIDAK berlaku untuk endpoint user (nilai/transkrip/finalisasi)
+ok 69 - token service TIDAK berlaku untuk endpoint user (nilai/transkrip/finalisasi)
+  ---
+  duration_ms: 11.225426
+  type: 'test'
+  ...
+# Subtest: token service kedaluwarsa ditolak 401 di endpoint sinkron
+ok 70 - token service kedaluwarsa ditolak 401 di endpoint sinkron
+  ---
+  duration_ms: 6.432925
+  type: 'test'
+  ...
+# Subtest: token service dengan sub bukan service-nilai ditolak
+ok 71 - token service dengan sub bukan service-nilai ditolak
+  ---
+  duration_ms: 5.002887
+  type: 'test'
+  ...
+# Subtest: TC-GW-01 akses LANGSUNG ke port service TANPA gateway secret ditolak (semua path, termasuk /health & path tak dikenal)
+ok 72 - TC-GW-01 akses LANGSUNG ke port service TANPA gateway secret ditolak (semua path, termasuk /health & path tak dikenal)
+  ---
+  duration_ms: 224.006805
+  type: 'test'
+  ...
+# Subtest: secret SALAH ditolak 403; secret dengan panjang beda / beda 1 karakter / huruf besar / kosong ditolak
+ok 73 - secret SALAH ditolak 403; secret dengan panjang beda / beda 1 karakter / huruf besar / kosong ditolak
+  ---
+  duration_ms: 24.137549
+  type: 'test'
+  ...
+# Subtest: TC-GW-02 secret BENAR tetapi tanpa token / token tidak valid -> 401 (secret tidak menggantikan token)
+ok 74 - TC-GW-02 secret BENAR tetapi tanpa token / token tidak valid -> 401 (secret tidak menggantikan token)
+  ---
+  duration_ms: 31.663036
+  type: 'test'
+  ...
+# Subtest: secret BENAR + token alg=none / HS512 palsu ditolak 401
+ok 75 - secret BENAR + token alg=none / HS512 palsu ditolak 401
+  ---
+  duration_ms: 8.901773
+  type: 'test'
+  ...
+# Subtest: service mem-verifikasi ulang kepemilikan: secret benar + token mahasiswa ke transkrip NIM lain -> 403 (bukan hanya gateway)
+ok 76 - service mem-verifikasi ulang kepemilikan: secret benar + token mahasiswa ke transkrip NIM lain -> 403 (bukan hanya gateway)
+  ---
+  duration_ms: 4.787708
+  type: 'test'
+  ...
+# Subtest: service mem-verifikasi ulang aturan sensitif tanpa gateway: dosen A edit nilai kelas B (secret benar) -> 403; luar jam -> 403; final -> 409
+ok 77 - service mem-verifikasi ulang aturan sensitif tanpa gateway: dosen A edit nilai kelas B (secret benar) -> 403; luar jam -> 403; final -> 409
+  ---
+  duration_ms: 32.696221
+  type: 'test'
+  ...
+# Subtest: secret + token user ke /transkrip/sinkron langsung ke service -> 403 SERVICE_TOKEN_REQUIRED; token service ke endpoint user -> 403
+ok 78 - secret + token user ke /transkrip/sinkron langsung ke service -> 403 SERVICE_TOKEN_REQUIRED; token service ke endpoint user -> 403
+  ---
+  duration_ms: 13.342513
+  type: 'test'
+  ...
+# (node:1075) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: client TIDAK dapat menyuntikkan X-Gateway-Secret lewat gateway: nilai kiriman client dibuang, auth tetap diperlukan
+ok 79 - client TIDAK dapat menyuntikkan X-Gateway-Secret lewat gateway: nilai kiriman client dibuang, auth tetap diperlukan
+  ---
+  duration_ms: 19.941117
+  type: 'test'
+  ...
+# Subtest: service tidak menjadi jalur bypass: role di header/klaim tidak cukup, identitas dari token + DB
+ok 80 - service tidak menjadi jalur bypass: role di header/klaim tidak cukup, identitas dari token + DB
+  ---
+  duration_ms: 3.459319
+  type: 'test'
+  ...
+# Subtest: service menolak token user yang role-nya di DB berubah (klaim token basi) dan akun nonaktif
+ok 81 - service menolak token user yang role-nya di DB berubah (klaim token basi) dan akun nonaktif
+  ---
+  duration_ms: 11.63415
+  type: 'test'
+  ...
+# Subtest: gateway merespons 502 (bukan bocor/hang) bila service hulu mati, dan mencatat kegagalan
+ok 82 - gateway merespons 502 (bukan bocor/hang) bila service hulu mati, dan mencatat kegagalan
+  ---
+  duration_ms: 26.97148
+  type: 'test'
+  ...
+# Subtest: device spoofing: token mhs.001 + device milik mhs.002 / dosen / admin -> 403 pada semua endpoint bisnis
+ok 83 - device spoofing: token mhs.001 + device milik mhs.002 / dosen / admin -> 403 pada semua endpoint bisnis
+  ---
+  duration_ms: 239.665079
+  type: 'test'
+  ...
+# Subtest: eskalasi role: admin tidak dapat edit/finalisasi/baca nilai; mahasiswa tidak dapat edit/finalisasi/baca direktori; dosen tidak dapat baca transkrip
+ok 84 - eskalasi role: admin tidak dapat edit/finalisasi/baca nilai; mahasiswa tidak dapat edit/finalisasi/baca direktori; dosen tidak dapat baca transkrip
+  ---
+  duration_ms: 24.166002
+  type: 'test'
+  ...
+# Subtest: token yang dipalsukan dengan role admin (secret salah) ditolak; role di klaim tidak dipercaya tanpa DB
+ok 85 - token yang dipalsukan dengan role admin (secret salah) ditolak; role di klaim tidak dipercaya tanpa DB
+  ---
+  duration_ms: 6.87605
+  type: 'test'
+  ...
+# Subtest: IDOR nilai/transkrip: semua kombinasi mahasiswa-lain dan dosen-lain ditolak tanpa kebocoran
+ok 86 - IDOR nilai/transkrip: semua kombinasi mahasiswa-lain dan dosen-lain ditolak tanpa kebocoran
+  ---
+  duration_ms: 38.494413
+  type: 'test'
+  ...
+# (node:1083) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: dosen hanya melihat kelas sendiri: tidak ada mahasiswa/nilai dari kelas lain pada GET /nilai
+ok 87 - dosen hanya melihat kelas sendiri: tidak ada mahasiswa/nilai dari kelas lain pada GET /nilai
+  ---
+  duration_ms: 28.39962
+  type: 'test'
+  ...
+# Subtest: device dinonaktifkan setelah login -> semua request berikutnya 403; refresh juga ditolak
+ok 88 - device dinonaktifkan setelah login -> semua request berikutnya 403; refresh juga ditolak
+  ---
+  duration_ms: 23.505558
+  type: 'test'
+  ...
+# Subtest: replay token user yang sudah logout: access token tetap valid sampai exp (batas diketahui), tetapi refresh mati
+ok 89 - replay token user yang sudah logout: access token tetap valid sampai exp (batas diketahui), tetapi refresh mati
+  ---
+  duration_ms: 14.880589
+  type: 'test'
+  ...
+# Subtest: rate limit login: percobaan GAGAL melebihi batas -> 429 + audit RATE_LIMITED; login sukses tidak dihitung
+ok 90 - rate limit login: percobaan GAGAL melebihi batas -> 429 + audit RATE_LIMITED; login sukses tidak dihitung
+  ---
+  duration_ms: 227.880913
+  type: 'test'
+  ...
+# Subtest: TC-GW-03 route tidak dikenal -> 404, tidak diproxy, diaudit sebagai deny ROUTE_NOT_ALLOWED
+ok 91 - TC-GW-03 route tidak dikenal -> 404, tidak diproxy, diaudit sebagai deny ROUTE_NOT_ALLOWED
+  ---
+  duration_ms: 199.717203
+  type: 'test'
+  ...
+# Subtest: method yang tidak diizinkan -> 405 + audit (DELETE/PATCH/POST pada endpoint GET, dll.)
+ok 92 - method yang tidak diizinkan -> 405 + audit (DELETE/PATCH/POST pada endpoint GET, dll.)
+  ---
+  duration_ms: 48.300838
+  type: 'test'
+  ...
+# Subtest: path traversal / encoding / double slash / trailing slash / huruf besar tidak lolos allowlist
+ok 93 - path traversal / encoding / double slash / trailing slash / huruf besar tidak lolos allowlist
+  ---
+  duration_ms: 22.543194
+  type: 'test'
+  ...
+# (node:1099) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+# (Use `node --trace-deprecation ...` to show where the warning was created)
+# Subtest: TC-IN-02 SQL injection pada ID/NIM/username/body: tidak ada bypass, tidak ada perubahan data, tabel utuh
+ok 94 - TC-IN-02 SQL injection pada ID/NIM/username/body: tidak ada bypass, tidak ada perubahan data, tabel utuh
+  ---
+  duration_ms: 407.73786
+  type: 'test'
+  ...
+# Subtest: payload NoSQL/objek bersarang pada login ditolak; payload terlalu besar ditolak
+ok 95 - payload NoSQL/objek bersarang pada login ditolak; payload terlalu besar ditolak
+  ---
+  duration_ms: 14.298615
+  type: 'test'
+  ...
+# Subtest: mass assignment: field status/student_id/class_id/version pada PUT /nilai diabaikan atau ditolak, tidak mengubah kolom lain
+ok 96 - mass assignment: field status/student_id/class_id/version pada PUT /nilai diabaikan atau ditolak, tidak mengubah kolom lain
+  ---
+  duration_ms: 10.816499
+  type: 'test'
+  ...
+# Subtest: respons keamanan: header helmet ada dan X-Powered-By tidak ada
+ok 97 - respons keamanan: header helmet ada dan X-Powered-By tidak ada
+  ---
+  duration_ms: 3.398886
+  type: 'test'
+  ...
+# Subtest: CORS: hanya origin yang dikonfigurasi yang mendapat izin
+ok 98 - CORS: hanya origin yang dikonfigurasi yang mendapat izin
+  ---
+  duration_ms: 9.733224
+  type: 'test'
+  ...
+# Subtest: check-node: Node < 20 ditolak dengan pesan yang jelas; 20-24 diterima tanpa peringatan
+ok 99 - check-node: Node < 20 ditolak dengan pesan yang jelas; 20-24 diterima tanpa peringatan
+  ---
+  duration_ms: 1.735058
+  type: 'test'
+  ...
+# Subtest: check-node: Node di atas 24 hanya memberi peringatan (tidak memblokir)
+ok 100 - check-node: Node di atas 24 hanya memberi peringatan (tidak memblokir)
+  ---
+  duration_ms: 0.200809
+  type: 'test'
+  ...
+# Subtest: check-node: versi tidak terbaca ditolak
+ok 101 - check-node: versi tidak terbaca ditolak
+  ---
+  duration_ms: 0.114044
+  type: 'test'
+  ...
+# Subtest: AC-02 seed minimum: 1 admin, 2 dosen, 3 mahasiswa, 2 kelas beda dosen, 1 device aktif per user
+ok 102 - AC-02 seed minimum: 1 admin, 2 dosen, 3 mahasiswa, 2 kelas beda dosen, 1 device aktif per user
+  ---
+  duration_ms: 12.440752
+  type: 'test'
+  ...
+# Subtest: seed idempoten: dijalankan dua kali tidak menggandakan data
+ok 103 - seed idempoten: dijalankan dua kali tidak menggandakan data
+  ---
+  duration_ms: 9.485005
+  type: 'test'
+  ...
+# Subtest: seed data sesuai PRD: nilai draft/final dan entri transkrip published untuk nilai final
+ok 104 - seed data sesuai PRD: nilai draft/final dan entri transkrip published untuk nilai final
+  ---
+  duration_ms: 5.342054
+  type: 'test'
+  ...
+# Subtest: NFR-SEC-02 password & client secret tersimpan sebagai hash bcrypt, bukan plaintext
+ok 105 - NFR-SEC-02 password & client secret tersimpan sebagai hash bcrypt, bukan plaintext
+  ---
+  duration_ms: 5.407839
+  type: 'test'
+  ...
+# Subtest: foreign key ditegakkan
+ok 106 - foreign key ditegakkan
+  ---
+  duration_ms: 5.724811
+  type: 'test'
+  ...
+# Subtest: constraint unik: username, device_id, (class_id, student_id) pada enrollments & grades, NIM
+ok 107 - constraint unik: username, device_id, (class_id, student_id) pada enrollments & grades, NIM
+  ---
+  duration_ms: 5.386249
+  type: 'test'
+  ...
+# Subtest: integritas: mahasiswa wajib NIM; skor 0..100; status dibatasi; kelas harus diampu dosen; peserta harus mahasiswa
+ok 108 - integritas: mahasiswa wajib NIM; skor 0..100; status dibatasi; kelas harus diampu dosen; peserta harus mahasiswa
+  ---
+  duration_ms: 5.263388
+  type: 'test'
+  ...
+# Subtest: nilai hanya untuk mahasiswa yang terdaftar pada kelas
+ok 109 - nilai hanya untuk mahasiswa yang terdaftar pada kelas
+  ---
+  duration_ms: 10.675798
+  type: 'test'
+  ...
+# Subtest: grade final wajib punya finalized_at (dan sebaliknya); transcript published wajib synced_at
+ok 110 - grade final wajib punya finalized_at (dan sebaliknya); transcript published wajib synced_at
+  ---
+  duration_ms: 5.496718
+  type: 'test'
+  ...
+# Subtest: transcript_entries.grade_id unik (satu entri per nilai -> retry tidak menggandakan)
+ok 111 - transcript_entries.grade_id unik (satu entri per nilai -> retry tidak menggandakan)
+  ---
+  duration_ms: 5.351446
+  type: 'test'
+  ...
+# Subtest: audit_logs append-only: DELETE ditolak; UPDATE kolom selain status_code ditolak; status_code hanya bisa diisi sekali
+ok 112 - audit_logs append-only: DELETE ditolak; UPDATE kolom selain status_code ditolak; status_code hanya bisa diisi sekali
+  ---
+  duration_ms: 5.317398
+  type: 'test'
+  ...
+# Subtest: audit_logs: result dibatasi allow/deny dan subject_type user/service/anonymous
+ok 113 - audit_logs: result dibatasi allow/deny dan subject_type user/service/anonymous
+  ---
+  duration_ms: 4.939413
+  type: 'test'
+  ...
+# Subtest: migrasi: schema_migrations tercatat dan migrate() idempoten
+ok 114 - migrasi: schema_migrations tercatat dan migrate() idempoten
+  ---
+  duration_ms: 5.016233
+  type: 'test'
+  ...
+# Subtest: indeks wajib PRD tersedia
+ok 115 - indeks wajib PRD tersedia
+  ---
+  duration_ms: 6.113669
+  type: 'test'
+  ...
+# Subtest: syncEntry: pertama membuat entri pending; ulang dengan payload sama idempoten (satu baris)
+ok 116 - syncEntry: pertama membuat entri pending; ulang dengan payload sama idempoten (satu baris)
+  ---
+  duration_ms: 10.221307
+  type: 'test'
+  ...
+# Subtest: syncEntry: versi baru memperbarui entri pending yang sama (bukan menambah baris)
+ok 117 - syncEntry: versi baru memperbarui entri pending yang sama (bukan menambah baris)
+  ---
+  duration_ms: 5.889702
+  type: 'test'
+  ...
+# Subtest: syncEntry: pending tidak masuk listPublished; published tidak dapat ditimpa versi lain
+ok 118 - syncEntry: pending tidak masuk listPublished; published tidak dapat ditimpa versi lain
+  ---
+  duration_ms: 19.502533
+  type: 'test'
+  ...
+# Subtest: commitFinalization atomik: bila satu entri tidak cocok versi, TIDAK ADA nilai yang menjadi final (rollback)
+ok 119 - commitFinalization atomik: bila satu entri tidak cocok versi, TIDAK ADA nilai yang menjadi final (rollback)
+  ---
+  duration_ms: 5.926819
+  type: 'test'
+  ...
+# Subtest: commitFinalization sukses: nilai final + entri published bersama-sama
+ok 120 - commitFinalization sukses: nilai final + entri published bersama-sama
+  ---
+  duration_ms: 5.875499
+  type: 'test'
+  ...
+# Subtest: updateScore tidak dapat mengubah nilai final / finalizing (guard atomik di repository)
+ok 121 - updateScore tidak dapat mengubah nilai final / finalizing (guard atomik di repository)
+  ---
+  duration_ms: 6.263054
+  type: 'test'
+  ...
+# Subtest: nilai.list: mahasiswa & dosen diizinkan, admin ditolak
+ok 122 - nilai.list: mahasiswa & dosen diizinkan, admin ditolak
+  ---
+  duration_ms: 1.37636
+  type: 'test'
+  ...
+# Subtest: nilai.update: dosen pengampu + draft + jam akses -> allow
+ok 123 - nilai.update: dosen pengampu + draft + jam akses -> allow
+  ---
+  duration_ms: 16.432393
+  type: 'test'
+  ...
+# Subtest: nilai.update: kelas dosen lain -> CLASS_NOT_OWNED; role salah -> ROLE_NOT_ALLOWED; tidak ada -> 404
+ok 124 - nilai.update: kelas dosen lain -> CLASS_NOT_OWNED; role salah -> ROLE_NOT_ALLOWED; tidak ada -> 404
+  ---
+  duration_ms: 0.550873
+  type: 'test'
+  ...
+# Subtest: nilai.update: nilai final -> 409 GRADE_FINAL
+ok 125 - nilai.update: nilai final -> 409 GRADE_FINAL
+  ---
+  duration_ms: 0.220857
+  type: 'test'
+  ...
+# Subtest: nilai.update & finalisasi: di luar jam akses -> OUT_OF_ACCESS_HOURS (403)
+ok 126 - nilai.update & finalisasi: di luar jam akses -> OUT_OF_ACCESS_HOURS (403)
+  ---
+  duration_ms: 0.55234
+  type: 'test'
+  ...
+# Subtest: kelas.finalisasi: pengampu allow; kelas lain / role lain / tidak ada ditolak
+ok 127 - kelas.finalisasi: pengampu allow; kelas lain / role lain / tidak ada ditolak
+  ---
+  duration_ms: 0.467439
+  type: 'test'
+  ...
+# Subtest: transkrip.get: mahasiswa hanya NIM sendiri (dari DB), admin semua NIM, dosen ditolak
+ok 128 - transkrip.get: mahasiswa hanya NIM sendiri (dari DB), admin semua NIM, dosen ditolak
+  ---
+  duration_ms: 0.724386
+  type: 'test'
+  ...
+# Subtest: transkrip.list: hanya admin
+ok 129 - transkrip.list: hanya admin
+  ---
+  duration_ms: 0.189456
+  type: 'test'
+  ...
+# Subtest: transkrip.sinkron: hanya token service; token user (apa pun) ditolak SERVICE_TOKEN_REQUIRED
+ok 130 - transkrip.sinkron: hanya token service; token user (apa pun) ditolak SERVICE_TOKEN_REQUIRED
+  ---
+  duration_ms: 0.531369
+  type: 'test'
+  ...
+# Subtest: service client nonaktif ditolak policy
+ok 131 - service client nonaktif ditolak policy
+  ---
+  duration_ms: 0.408845
+  type: 'test'
+  ...
+# Subtest: default deny: route tanpa aturan eksplisit ditolak
+ok 132 - default deny: route tanpa aturan eksplisit ditolak
+  ---
+  duration_ms: 0.256352
+  type: 'test'
+  ...
+# Subtest: kelas tidak lengkap (mahasiswa terdaftar tanpa nilai) -> 422 CLASS_INCOMPLETE
+ok 133 - kelas tidak lengkap (mahasiswa terdaftar tanpa nilai) -> 422 CLASS_INCOMPLETE
+  ---
+  duration_ms: 0.331941
+  type: 'test'
+  ...
+# Subtest: matchRoute: route valid dengan parameter
+ok 134 - matchRoute: route valid dengan parameter
+  ---
+  duration_ms: 0.833747
+  type: 'test'
+  ...
+# Subtest: TC-GW-03 matchRoute: path tidak dikenal / traversal / encoding / trailing slash -> tidak cocok
+ok 135 - TC-GW-03 matchRoute: path tidak dikenal / traversal / encoding / trailing slash -> tidak cocok
+  ---
+  duration_ms: 0.215973
+  type: 'test'
+  ...
+# Subtest: matchRoute: method tidak diizinkan dilaporkan sebagai allowedMethods (bukan route)
+ok 136 - matchRoute: method tidak diizinkan dilaporkan sebagai allowedMethods (bukan route)
+  ---
+  duration_ms: 0.103649
+  type: 'test'
+  ...
+# Subtest: safeEqual: sama/beda/panjang beda/bukan string
+ok 137 - safeEqual: sama/beda/panjang beda/bukan string
+  ---
+  duration_ms: 1.33459
+  type: 'test'
+  ...
+# Subtest: refresh token opaque: unik, panjang >= 64 karakter, hash SHA-256 deterministik & tidak sama dengan token
+ok 138 - refresh token opaque: unik, panjang >= 64 karakter, hash SHA-256 deterministik & tidak sama dengan token
+  ---
+  duration_ms: 0.579715
+  type: 'test'
+  ...
+# Subtest: password: hash bcrypt (bukan plaintext), verifikasi benar/salah
+ok 139 - password: hash bcrypt (bukan plaintext), verifikasi benar/salah
+  ---
+  duration_ms: 28.049752
+  type: 'test'
+  ...
+# Subtest: logger menyamarkan field sensitif (authorization, password, token, secret)
+ok 140 - logger menyamarkan field sensitif (authorization, password, token, secret)
+  ---
+  duration_ms: 1.089406
+  type: 'test'
+  ...
+# Subtest: sanitizeDeviceId untuk audit: batasi panjang dan karakter
+ok 141 - sanitizeDeviceId untuk audit: batasi panjang dan karakter
+  ---
+  duration_ms: 0.278498
+  type: 'test'
+  ...
+# Subtest: device matching: harus dikenal, aktif, dan terikat ke user yang sama
+ok 142 - device matching: harus dikenal, aktif, dan terikat ke user yang sama
+  ---
+  duration_ms: 1.341314
+  type: 'test'
+  ...
+# Subtest: setup-env: .env hasil generate terbaca dotenv utuh (tidak terpotong oleh "\#") dan lolos loadConfig
+ok 143 - setup-env: .env hasil generate terbaca dotenv utuh (tidak terpotong oleh "\#") dan lolos loadConfig
+  ---
+  duration_ms: 32.91129
+  type: 'test'
+  ...
+# Subtest: setup-env: secret sistem acak per instalasi, tidak menimpa .env tanpa --force, --random-demo mengacak kredensial demo
+ok 144 - setup-env: secret sistem acak per instalasi, tidak menimpa .env tanpa --force, --random-demo mengacak kredensial demo
+  ---
+  duration_ms: 120.468759
+  type: 'test'
+  ...
+# Subtest: loadConfig menolak secret placeholder / terlalu pendek
+ok 145 - loadConfig menolak secret placeholder / terlalu pendek
+  ---
+  duration_ms: 0.706346
+  type: 'test'
+  ...
+# Subtest: TC-VAL-07 batas jam akses: 06:59:59 ditolak, 07:00:00 diizinkan (awal inklusif)
+ok 146 - TC-VAL-07 batas jam akses: 06:59:59 ditolak, 07:00:00 diizinkan (awal inklusif)
+  ---
+  duration_ms: 14.650605
+  type: 'test'
+  ...
+# Subtest: batas akhir eksklusif: 20:59:59 diizinkan, 21:00:00 dan 21:01 ditolak
+ok 147 - batas akhir eksklusif: 20:59:59 diizinkan, 21:00:00 dan 21:01 ditolak
+  ---
+  duration_ms: 0.214581
+  type: 'test'
+  ...
+# Subtest: zona waktu eksplisit: jam server UTC tidak dipakai (12:00 UTC = 19:00 WIB diizinkan; 15:00 UTC = 22:00 WIB ditolak)
+ok 148 - zona waktu eksplisit: jam server UTC tidak dipakai (12:00 UTC = 19:00 WIB diizinkan; 15:00 UTC = 22:00 WIB ditolak)
+  ---
+  duration_ms: 0.153993
+  type: 'test'
+  ...
+# Subtest: jam akses dapat dikonfigurasi (mudah didemokan) dan mendukung timezone lain
+ok 149 - jam akses dapat dikonfigurasi (mudah didemokan) dan mendukung timezone lain
+  ---
+  duration_ms: 0.433696
+  type: 'test'
+  ...
+# Subtest: parseHHMM menolak format salah
+ok 150 - parseHHMM menolak format salah
+  ---
+  duration_ms: 0.263938
+  type: 'test'
+  ...
+# Subtest: fixed clock dapat dimajukan (deterministik tanpa menunggu jam)
+ok 151 - fixed clock dapat dimajukan (deterministik tanpa menunggu jam)
+  ---
+  duration_ms: 0.326592
+  type: 'test'
+  ...
+# Subtest: parseDurationSeconds: 10m=600, 1d=86400, 5m=300
+ok 152 - parseDurationSeconds: 10m=600, 1d=86400, 5m=300
+  ---
+  duration_ms: 0.253291
+  type: 'test'
+  ...
+# Subtest: AC-04 access token: claim sub+role, exp tepat 600 detik setelah iat
+ok 153 - AC-04 access token: claim sub+role, exp tepat 600 detik setelah iat
+  ---
+  duration_ms: 4.330832
+  type: 'test'
+  ...
+# Subtest: AC-06 token service: role=service, exp tepat 300 detik
+ok 154 - AC-06 token service: role=service, exp tepat 300 detik
+  ---
+  duration_ms: 0.658371
+  type: 'test'
+  ...
+# Subtest: signAccess menolak role di luar admin/dosen/mahasiswa (termasuk service)
+ok 155 - signAccess menolak role di luar admin/dosen/mahasiswa (termasuk service)
+  ---
+  duration_ms: 0.265117
+  type: 'test'
+  ...
+# Subtest: verify menolak: kosong, malformed, bukan string
+ok 156 - verify menolak: kosong, malformed, bukan string
+  ---
+  duration_ms: 0.560672
+  type: 'test'
+  ...
+# Subtest: verify menolak tanda tangan salah
+ok 157 - verify menolak tanda tangan salah
+  ---
+  duration_ms: 0.570901
+  type: 'test'
+  ...
+# Subtest: verify menolak token expired dengan kode TOKEN_EXPIRED
+ok 158 - verify menolak token expired dengan kode TOKEN_EXPIRED
+  ---
+  duration_ms: 0.541622
+  type: 'test'
+  ...
+# Subtest: verify menolak alg=none dan algoritma lain
+ok 159 - verify menolak alg=none dan algoritma lain
+  ---
+  duration_ms: 0.778775
+  type: 'test'
+  ...
+# Subtest: verify menolak claim wajib hilang (tanpa sub / tanpa role) dan role tak dikenal
+ok 160 - verify menolak claim wajib hilang (tanpa sub / tanpa role) dan role tak dikenal
+  ---
+  duration_ms: 0.872637
+  type: 'test'
+  ...
+# Subtest: verify menolak issuer/audience salah dan token tanpa exp
+ok 161 - verify menolak issuer/audience salah dan token tanpa exp
+  ---
+  duration_ms: 1.170679
+  type: 'test'
+  ...
+# Subtest: extractBearer: AUTH_REQUIRED bila header tidak ada, INVALID_TOKEN bila format salah
+ok 162 - extractBearer: AUTH_REQUIRED bila header tidak ada, INVALID_TOKEN bila format salah
+  ---
+  duration_ms: 0.624657
+  type: 'test'
+  ...
+# Subtest: secret terlalu pendek ditolak saat membuat token service
+ok 163 - secret terlalu pendek ditolak saat membuat token service
+  ---
+  duration_ms: 0.192073
+  type: 'test'
+  ...
+# Subtest: TC-IN-01 skor: hanya angka 0..100
+ok 164 - TC-IN-01 skor: hanya angka 0..100
+  ---
+  duration_ms: 3.742599
+  type: 'test'
+  ...
+# Subtest: body update nilai: field tak dikenal ditolak (strict) -> tidak ada mass assignment
+ok 165 - body update nilai: field tak dikenal ditolak (strict) -> tidak ada mass assignment
+  ---
+  duration_ms: 0.458966
+  type: 'test'
+  ...
+# Subtest: login: username/password wajib string, batas panjang, tanpa field tambahan
+ok 166 - login: username/password wajib string, batas panjang, tanpa field tambahan
+  ---
+  duration_ms: 1.126888
+  type: 'test'
+  ...
+# Subtest: refresh token: string 20..256
+ok 167 - refresh token: string 20..256
+  ---
+  duration_ms: 0.571311
+  type: 'test'
+  ...
+# Subtest: NIM, ID, dan header device: whitelist karakter
+ok 168 - NIM, ID, dan header device: whitelist karakter
+  ---
+  duration_ms: 0.505097
+  type: 'test'
+  ...
+# Subtest: payload sync: lengkap, tipe benar, strict
+ok 169 - payload sync: lengkap, tipe benar, strict
+  ---
+  duration_ms: 1.247372
+  type: 'test'
+  ...
+# Subtest: pesan error validasi tidak memantulkan nilai input
+ok 170 - pesan error validasi tidak memantulkan nilai input
+  ---
+  duration_ms: 0.248078
+  type: 'test'
+  ...
+1..170
+# tests 170
+# suites 0
+# pass 170
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9610.195745

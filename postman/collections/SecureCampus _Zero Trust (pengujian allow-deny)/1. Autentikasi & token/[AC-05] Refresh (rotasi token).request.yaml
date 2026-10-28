@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/refresh"
+method: POST
+headers:
+  X-Device-ID: DEV-MHS-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "refresh_token": "{{refMhs1}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200', () => pm.response.to.have.status(200));
+      const j = pm.response.json();
+      pm.collectionVariables.set('refMhs1Old', pm.collectionVariables.get('refMhs1'));
+      pm.collectionVariables.set('refMhs1', j.refresh_token); pm.collectionVariables.set('tokMhs1', j.access_token);
+    language: text/javascript
+order: 8000

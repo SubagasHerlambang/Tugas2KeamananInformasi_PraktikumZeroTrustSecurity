@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/nilai/GRD-501-001"
+method: PUT
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "score": "85"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 400', () => pm.response.to.have.status(400));
+      pm.test('error.code = VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));
+    language: text/javascript
+order: 9000

@@ -1,0 +1,2002 @@
+{
+  "info": {
+    "name": "SecureCampus — Zero Trust (pengujian allow/deny)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Jalankan folder 0 lebih dulu (login), lalu folder 1-4, terakhir folder 5 (mengubah data). Isi demoPassword & serviceClientSecret pada environment dari hasil `npm run setup` / file .env. Setelah folder 5 jalankan `npm run db:reset` untuk mengulang."
+  },
+  "variable": [
+    {
+      "key": "tokMhs1",
+      "value": ""
+    },
+    {
+      "key": "tokMhs2",
+      "value": ""
+    },
+    {
+      "key": "tokAndi",
+      "value": ""
+    },
+    {
+      "key": "tokBunga",
+      "value": ""
+    },
+    {
+      "key": "tokAdmin",
+      "value": ""
+    },
+    {
+      "key": "tokService",
+      "value": ""
+    },
+    {
+      "key": "refMhs1",
+      "value": ""
+    },
+    {
+      "key": "refMhs1Old",
+      "value": ""
+    },
+    {
+      "key": "tokInvalid",
+      "value": "bukan.jwt.valid"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Setup — login semua role",
+      "item": [
+        {
+          "name": "[TC-AUTH-01] Login mhs.001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mhs.001\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('expires_in = 600 dan refresh_expires_in = 86400', () => { pm.expect(j.expires_in).to.eql(600); pm.expect(j.refresh_expires_in).to.eql(86400); });",
+                  "pm.collectionVariables.set('tokMhs1', j.access_token);",
+                  "pm.collectionVariables.set('refMhs1', j.refresh_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-01] Login mhs.002",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-002"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mhs.002\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('expires_in = 600 dan refresh_expires_in = 86400', () => { pm.expect(j.expires_in).to.eql(600); pm.expect(j.refresh_expires_in).to.eql(86400); });",
+                  "pm.collectionVariables.set('tokMhs2', j.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-01] Login dosen.andi",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"dosen.andi\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('expires_in = 600 dan refresh_expires_in = 86400', () => { pm.expect(j.expires_in).to.eql(600); pm.expect(j.refresh_expires_in).to.eql(86400); });",
+                  "pm.collectionVariables.set('tokAndi', j.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-01] Login dosen.bunga",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-002"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"dosen.bunga\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('expires_in = 600 dan refresh_expires_in = 86400', () => { pm.expect(j.expires_in).to.eql(600); pm.expect(j.refresh_expires_in).to.eql(86400); });",
+                  "pm.collectionVariables.set('tokBunga', j.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-01] Login admin.demo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin.demo\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('expires_in = 600 dan refresh_expires_in = 86400', () => { pm.expect(j.expires_in).to.eql(600); pm.expect(j.refresh_expires_in).to.eql(86400); });",
+                  "pm.collectionVariables.set('tokAdmin', j.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-SVC-01] Token service (POST /auth/service)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/service",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "service"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"service-nilai\",\n  \"client_secret\": \"{{serviceClientSecret}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('expires_in = 300', () => pm.expect(j.expires_in).to.eql(300));",
+                  "const c = JSON.parse(atob(j.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));",
+                  "pm.test('role = service, exp-iat = 300', () => { pm.expect(c.role).to.eql('service'); pm.expect(c.exp - c.iat).to.eql(300); });",
+                  "pm.collectionVariables.set('tokService', j.access_token);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "1. Autentikasi & token",
+      "item": [
+        {
+          "name": "[TC-AUTH-02] Password salah",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mhs.001\",\n  \"password\": \"salah\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));",
+                  "pm.test('error.code = INVALID_CREDENTIALS', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_CREDENTIALS'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-03] Device tidak terdaftar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-UNKNOWN"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mhs.001\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = DEVICE_NOT_REGISTERED', () => pm.expect(pm.response.json().error.code).to.eql('DEVICE_NOT_REGISTERED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-04] Device milik user lain",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-002"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"mhs.001\",\n  \"password\": \"{{demoPassword}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = DEVICE_NOT_REGISTERED', () => pm.expect(pm.response.json().error.code).to.eql('DEVICE_NOT_REGISTERED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-05] Tanpa token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));",
+                  "pm.test('error.code = AUTH_REQUIRED', () => pm.expect(pm.response.json().error.code).to.eql('AUTH_REQUIRED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-05] Token rusak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokInvalid}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Variabel tokInvalid sengaja kosong/rusak.",
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));",
+                  "pm.test('error.code = INVALID_TOKEN', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_TOKEN'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[AC-07] Device tidak ada pada request bisnis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = DEVICE_NOT_REGISTERED', () => pm.expect(pm.response.json().error.code).to.eql('DEVICE_NOT_REGISTERED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[AC-07] Device milik user lain pada request bisnis",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-002"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = DEVICE_NOT_REGISTERED', () => pm.expect(pm.response.json().error.code).to.eql('DEVICE_NOT_REGISTERED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[AC-05] Refresh (rotasi token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refMhs1}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.collectionVariables.set('refMhs1Old', pm.collectionVariables.get('refMhs1'));",
+                  "pm.collectionVariables.set('refMhs1', j.refresh_token); pm.collectionVariables.set('tokMhs1', j.access_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[AC-05] Refresh token lama (sudah dirotasi) ditolak",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refMhs1Old}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-06] Logout (cabut refresh token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refMhs1}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-AUTH-06] Refresh setelah logout ditolak",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh_token\": \"{{refMhs1}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-SVC-02] Token service: secret salah",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/service",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "service"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"service-nilai\",\n  \"client_secret\": \"salah\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Nilai (policy role + kepemilikan)",
+      "item": [
+        {
+          "name": "[TC-VAL-01] Mahasiswa baca nilai sendiri",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('hanya NIM sendiri', () => pm.response.json().data.every(g => g.student_nim === '247006110001'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-VAL-03] Dosen baca kelas sendiri",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('hanya CLS-501', () => pm.response.json().data.every(g => g.class_id === 'CLS-501'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin GET /nilai ditolak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-VAL-05] Dosen edit nilai valid (butuh jam akses terbuka)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 85\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const inWin = pm.environment.get('expectInAccessWindow') !== 'false';",
+                  "pm.test('200 bila dalam jam akses, 403 OUT_OF_ACCESS_HOURS bila di luar', () => { if (inWin) pm.response.to.have.status(200); else { pm.response.to.have.status(403); pm.expect(pm.response.json().error.code).to.eql('OUT_OF_ACCESS_HOURS'); } });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-VAL-04] Dosen edit nilai kelas lain",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-502-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-502-001"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 85\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('403 (CLASS_NOT_OWNED)', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().error.code).to.eql('CLASS_NOT_OWNED'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-VAL-06] Edit nilai final",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-003",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-003"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 10\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const inWin = pm.environment.get('expectInAccessWindow') !== 'false';",
+                  "pm.test('409 GRADE_FINAL (dalam jam) / 403 (di luar jam)', () => pm.expect(pm.response.code).to.eql(inWin ? 409 : 403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin edit nilai ditolak",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 100\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mahasiswa edit nilai ditolak",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs2}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-002"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 100\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-IN-01] Skor invalid (string)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": \"85\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('error.code = VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-IN-01] Skor invalid (>100)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 101\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-IN-02] SQL injection pada ID",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001'%20OR%201=1--",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001'%20OR%201=1--"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 99\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('tidak ada bypass (400/404)', () => pm.expect([400, 404]).to.include(pm.response.code));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Transkrip",
+      "item": [
+        {
+          "name": "[TC-TR-01] Mahasiswa baca transkrip sendiri",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/247006110001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "247006110001"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-TR-02] Mahasiswa baca transkrip orang lain (IDOR)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/247006110002",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "247006110002"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('tanpa isi transkrip', () => pm.expect(pm.response.json().data).to.be.undefined);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-TR-03] Admin baca transkrip NIM 1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/247006110001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "247006110001"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-TR-03] Admin baca transkrip NIM 3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/247006110003",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "247006110003"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dosen baca transkrip ditolak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/247006110001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "247006110001"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-TR-04] Token user ke /transkrip/sinkron",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/sinkron",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "sinkron"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grade_id\": \"GRD-501-001\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = SERVICE_TOKEN_REQUIRED', () => pm.expect(pm.response.json().error.code).to.eql('SERVICE_TOKEN_REQUIRED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-TR-04] Token dosen ke /transkrip/sinkron",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/sinkron",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "sinkron"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grade_id\": \"GRD-501-001\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = SERVICE_TOKEN_REQUIRED', () => pm.expect(pm.response.json().error.code).to.eql('SERVICE_TOKEN_REQUIRED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-TR-04] Token admin ke /transkrip/sinkron",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/sinkron",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "sinkron"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grade_id\": \"GRD-501-001\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = SERVICE_TOKEN_REQUIRED', () => pm.expect(pm.response.json().error.code).to.eql('SERVICE_TOKEN_REQUIRED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Token service ke endpoint user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokService}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Gateway & route",
+      "item": [
+        {
+          "name": "[TC-GW-03] Route tidak dikenal",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Method tidak diizinkan",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nilai/GRD-501-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nilai",
+                "GRD-501-001"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 405', () => pm.response.to.have.status(405));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Health gateway",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Finalisasi (jalankan TERAKHIR; mengubah data)",
+      "item": [
+        {
+          "name": "[TC-FIN-02] Dosen finalisasi kelas bukan miliknya",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kelas/CLS-502/finalisasi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelas",
+                "CLS-502",
+                "finalisasi"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('error.code = CLASS_NOT_OWNED', () => pm.expect(pm.response.json().error.code).to.eql('CLASS_NOT_OWNED'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin finalisasi ditolak",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAdmin}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-ADMIN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kelas/CLS-501/finalisasi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelas",
+                "CLS-501",
+                "finalisasi"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-FIN-01] Dosen finalisasi kelas sendiri (CLS-501)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kelas/CLS-501/finalisasi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelas",
+                "CLS-501",
+                "finalisasi"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const inWin = pm.environment.get('expectInAccessWindow') !== 'false';",
+                  "pm.test('200 (dalam jam) atau 403 (di luar jam)', () => pm.expect(pm.response.code).to.eql(inWin ? 200 : 403));",
+                  "if (inWin) pm.test('transcript_sync = success', () => pm.expect(pm.response.json().data.transcript_sync).to.eql('success'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Transkrip mhs.001 setelah finalisasi",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokMhs1}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-MHS-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transkrip/247006110001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transkrip",
+                "247006110001"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "[TC-FIN-04] Finalisasi ulang -> 409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokAndi}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "DEV-DOSEN-001"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kelas/CLS-501/finalisasi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kelas",
+                "CLS-501",
+                "finalisasi"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const inWin = pm.environment.get('expectInAccessWindow') !== 'false';",
+                  "pm.test('409 GRADE_FINAL (dalam jam) / 403 (di luar jam)', () => pm.expect(pm.response.code).to.eql(inWin ? 409 : 403));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

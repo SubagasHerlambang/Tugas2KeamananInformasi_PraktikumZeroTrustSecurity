@@ -1,0 +1,41 @@
+✔ TC-GW-01 akses LANGSUNG ke port service TANPA gateway secret ditolak (semua path, termasuk /health & path tak dikenal) (203.409641ms)
+✔ secret SALAH ditolak 403; secret dengan panjang beda / beda 1 karakter / huruf besar / kosong ditolak (30.785983ms)
+✔ TC-GW-02 secret BENAR tetapi tanpa token / token tidak valid -> 401 (secret tidak menggantikan token) (29.65888ms)
+✔ secret BENAR + token alg=none / HS512 palsu ditolak 401 (12.569154ms)
+✔ service mem-verifikasi ulang kepemilikan: secret benar + token mahasiswa ke transkrip NIM lain -> 403 (bukan hanya gateway) (4.82635ms)
+✔ service mem-verifikasi ulang aturan sensitif tanpa gateway: dosen A edit nilai kelas B (secret benar) -> 403; luar jam -> 403; final -> 409 (36.093671ms)
+✔ secret + token user ke /transkrip/sinkron langsung ke service -> 403 SERVICE_TOKEN_REQUIRED; token service ke endpoint user -> 403 (16.586994ms)
+(node:980) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ client TIDAK dapat menyuntikkan X-Gateway-Secret lewat gateway: nilai kiriman client dibuang, auth tetap diperlukan (16.487175ms)
+✔ service tidak menjadi jalur bypass: role di header/klaim tidak cukup, identitas dari token + DB (4.338096ms)
+✔ service menolak token user yang role-nya di DB berubah (klaim token basi) dan akun nonaktif (17.126517ms)
+✔ gateway merespons 502 (bukan bocor/hang) bila service hulu mati, dan mencatat kegagalan (29.468077ms)
+✔ device spoofing: token mhs.001 + device milik mhs.002 / dosen / admin -> 403 pada semua endpoint bisnis (245.026252ms)
+✔ eskalasi role: admin tidak dapat edit/finalisasi/baca nilai; mahasiswa tidak dapat edit/finalisasi/baca direktori; dosen tidak dapat baca transkrip (20.862966ms)
+✔ token yang dipalsukan dengan role admin (secret salah) ditolak; role di klaim tidak dipercaya tanpa DB (8.299216ms)
+✔ IDOR nilai/transkrip: semua kombinasi mahasiswa-lain dan dosen-lain ditolak tanpa kebocoran (34.609224ms)
+(node:988) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ dosen hanya melihat kelas sendiri: tidak ada mahasiswa/nilai dari kelas lain pada GET /nilai (25.784739ms)
+✔ device dinonaktifkan setelah login -> semua request berikutnya 403; refresh juga ditolak (16.157834ms)
+✔ replay token user yang sudah logout: access token tetap valid sampai exp (batas diketahui), tetapi refresh mati (13.749518ms)
+✔ rate limit login: percobaan GAGAL melebihi batas -> 429 + audit RATE_LIMITED; login sukses tidak dihitung (235.412252ms)
+✔ TC-GW-03 route tidak dikenal -> 404, tidak diproxy, diaudit sebagai deny ROUTE_NOT_ALLOWED (193.625632ms)
+✔ method yang tidak diizinkan -> 405 + audit (DELETE/PATCH/POST pada endpoint GET, dll.) (57.808002ms)
+✔ path traversal / encoding / double slash / trailing slash / huruf besar tidak lolos allowlist (25.966843ms)
+(node:1004) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ TC-IN-02 SQL injection pada ID/NIM/username/body: tidak ada bypass, tidak ada perubahan data, tabel utuh (407.916177ms)
+✔ payload NoSQL/objek bersarang pada login ditolak; payload terlalu besar ditolak (12.845092ms)
+✔ mass assignment: field status/student_id/class_id/version pada PUT /nilai diabaikan atau ditolak, tidak mengubah kolom lain (11.919551ms)
+✔ respons keamanan: header helmet ada dan X-Powered-By tidak ada (2.654735ms)
+✔ CORS: hanya origin yang dikonfigurasi yang mendapat izin (8.239679ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2952.895673

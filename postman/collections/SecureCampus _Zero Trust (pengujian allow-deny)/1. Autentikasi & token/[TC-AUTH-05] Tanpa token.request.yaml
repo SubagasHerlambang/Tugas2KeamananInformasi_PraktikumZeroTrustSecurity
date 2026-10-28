@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/nilai"
+method: GET
+headers:
+  X-Device-ID: DEV-MHS-001
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 401', () => pm.response.to.have.status(401));
+      pm.test('error.code = AUTH_REQUIRED', () => pm.expect(pm.response.json().error.code).to.eql('AUTH_REQUIRED'));
+    language: text/javascript
+order: 4000

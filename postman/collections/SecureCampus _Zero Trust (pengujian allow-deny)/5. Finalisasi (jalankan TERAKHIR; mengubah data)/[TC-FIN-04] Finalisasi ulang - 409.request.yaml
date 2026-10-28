@@ -1,0 +1,15 @@
+$kind: http-request
+name: "[TC-FIN-04] Finalisasi ulang -> 409"
+url: "{{baseUrl}}/kelas/CLS-501/finalisasi"
+method: POST
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const inWin = pm.environment.get('expectInAccessWindow') !== 'false';
+      pm.test('409 GRADE_FINAL (dalam jam) / 403 (di luar jam)', () => pm.expect(pm.response.code).to.eql(inWin ? 409 : 403));
+    language: text/javascript
+order: 5000

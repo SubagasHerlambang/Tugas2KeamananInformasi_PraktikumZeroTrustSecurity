@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/nilai/GRD-501-001'%20OR%201=1--"
+method: PUT
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "score": 99
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('tidak ada bypass (400/404)', () => pm.expect([400, 404]).to.include(pm.response.code));
+    language: text/javascript
+order: 11000

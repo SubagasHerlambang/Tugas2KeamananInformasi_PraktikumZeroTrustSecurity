@@ -1,0 +1,29 @@
+PASS  3 proses terpisah berjalan: gateway :3000, nilai :3001, transkrip :3002  (706,707,708)
+PASS  AC-12 direct ke :3001 tanpa secret ditolak (403)
+PASS  AC-12 direct ke :3002 tanpa secret ditolak (403)
+PASS  AC-12 direct dengan secret salah ditolak (403)
+PASS  AC-12 direct dengan secret benar tanpa token ditolak (401)
+PASS  login 3 role berhasil (access 600s, refresh 86400s)
+PASS  login device salah ditolak (403)
+PASS  mahasiswa melihat nilai sendiri (2 baris, NIM sendiri)
+PASS  IDOR: mahasiswa membaca transkrip NIM lain -> 403
+PASS  device spoof: token mhs.001 + DEV-MHS-002 -> 403
+PASS  dosen edit nilai kelas sendiri -> 200
+PASS  dosen edit nilai kelas lain -> 403
+PASS  edit nilai final -> 409
+PASS  token service: role=service, 300 detik
+PASS  token user ke /transkrip/sinkron -> 403 SERVICE_TOKEN_REQUIRED
+PASS  finalisasi CLS-501 -> 200 (sinkron via gateway + token service)  (["GRD-501-001","GRD-501-002"])
+PASS  transkrip mhs.001 memuat entri published dengan skor 88
+PASS  admin membaca transkrip NIM mana pun
+PASS  admin tidak boleh edit nilai (403)
+PASS  route tak dikenal -> 404
+PASS  logout -> 204 dan refresh sesudahnya ditolak (401)
+PASS  frontend build disajikan di :4173 (index.html memuat root + bundle)
+PASS  CORS: preflight dari origin frontend lokal diizinkan
+PASS  CORS: origin asing tidak mendapat izin
+PASS  audit log berisi event allow & deny  (total=22 allow=13 deny=9)
+PASS  audit mencatat 2 panggilan sinkron (2 nilai draft) oleh subject service lewat gateway  (rows=2)
+PASS  audit log tidak memuat token/secret
+
+RINGKASAN SMOKE: 27/27 PASS, 0 FAIL

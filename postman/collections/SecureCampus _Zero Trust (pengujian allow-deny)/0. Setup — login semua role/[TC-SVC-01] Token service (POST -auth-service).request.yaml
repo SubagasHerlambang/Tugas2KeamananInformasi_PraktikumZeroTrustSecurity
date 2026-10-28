@@ -1,0 +1,24 @@
+$kind: http-request
+name: "[TC-SVC-01] Token service (POST /auth/service)"
+url: "{{baseUrl}}/auth/service"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "client_id": "service-nilai",
+      "client_secret": "{{serviceClientSecret}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200', () => pm.response.to.have.status(200));
+      const j = pm.response.json();
+      pm.test('expires_in = 300', () => pm.expect(j.expires_in).to.eql(300));
+      const c = JSON.parse(atob(j.access_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      pm.test('role = service, exp-iat = 300', () => { pm.expect(c.role).to.eql('service'); pm.expect(c.exp - c.iat).to.eql(300); });
+      pm.collectionVariables.set('tokService', j.access_token);
+    language: text/javascript
+order: 6000

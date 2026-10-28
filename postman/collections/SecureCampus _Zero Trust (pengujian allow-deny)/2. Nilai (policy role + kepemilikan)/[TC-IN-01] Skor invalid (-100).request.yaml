@@ -1,0 +1,19 @@
+$kind: http-request
+name: "[TC-IN-01] Skor invalid (>100)"
+url: "{{baseUrl}}/nilai/GRD-501-001"
+method: PUT
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "score": 101
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('HTTP 400', () => pm.response.to.have.status(400));
+    language: text/javascript
+order: 10000

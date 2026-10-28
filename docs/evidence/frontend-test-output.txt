@@ -1,0 +1,22 @@
+
+ RUN  v5.0.5 /home/claude/securecampus/frontend
+
+ ✓ tests/ui-flow.test.jsx > login > password salah -> pesan error generik, tetap di halaman login 557ms
+ ✓ tests/ui-flow.test.jsx > login > device tidak terdaftar -> ditolak dengan pesan jelas tanpa membocorkan detail sensitif 285ms
+ ✓ tests/ui-flow.test.jsx > login > gateway tidak dapat dihubungi -> pesan jaringan 253ms
+(node:623) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ tests/ui-flow.test.jsx > alur mahasiswa > login -> nilai milik sendiri -> tab transkrip (belum ada) -> logout kembali ke login 315ms
+ ✓ tests/ui-flow.test.jsx > alur dosen -> mahasiswa -> admin (edit, finalisasi, transkrip) > dosen mengedit nilai dan memfinalisasi kelas; hanya kelas sendiri yang tampil 626ms
+ ✓ tests/ui-flow.test.jsx > alur dosen -> mahasiswa -> admin (edit, finalisasi, transkrip) > mahasiswa melihat transkrip yang sudah terisi setelah finalisasi 289ms
+ ✓ tests/ui-flow.test.jsx > alur dosen -> mahasiswa -> admin (edit, finalisasi, transkrip) > admin: daftar mahasiswa, buka transkrip NIM mana pun, tanpa kontrol edit nilai 320ms
+ ✓ tests/ui-flow.test.jsx > klien API: sesi & token > access token kedaluwarsa (10 menit) -> refresh otomatis satu kali lalu request diulang 17ms
+ ✓ tests/ui-flow.test.jsx > klien API: sesi & token > token tidak valid -> sesi dihapus dan callback sesi berakhir dipanggil 9ms
+ ✓ tests/ui-flow.test.jsx > klien API: sesi & token > akses NIM lain dari klien mahasiswa -> ApiError 403 FORBIDDEN (backend menolak, bukan UI) 9ms
+ ✓ tests/ui-flow.test.jsx > klien API: sesi & token > token tidak disimpan di localStorage/sessionStorage 5ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  17:23:27
+   Duration  5.46s (tests 55%, environment 25%, import 14%, transform 5%, worker 1%)
+

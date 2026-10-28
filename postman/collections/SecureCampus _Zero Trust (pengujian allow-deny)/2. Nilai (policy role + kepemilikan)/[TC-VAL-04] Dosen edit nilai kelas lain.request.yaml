@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/nilai/GRD-502-001"
+method: PUT
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "score": 85
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('403 (CLASS_NOT_OWNED)', () => { pm.response.to.have.status(403); pm.expect(pm.response.json().error.code).to.eql('CLASS_NOT_OWNED'); });
+    language: text/javascript
+order: 5000

@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  X-Device-ID: DEV-MHS-002
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "username": "mhs.001",
+      "password": "{{demoPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 403', () => pm.response.to.have.status(403));
+      pm.test('error.code = DEVICE_NOT_REGISTERED', () => pm.expect(pm.response.json().error.code).to.eql('DEVICE_NOT_REGISTERED'));
+    language: text/javascript
+order: 3000

@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/nilai/GRD-501-001"
+method: PUT
+headers:
+  Authorization: Bearer {{tokAdmin}}
+  X-Device-ID: DEV-ADMIN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "score": 100
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('HTTP 403', () => pm.response.to.have.status(403));
+    language: text/javascript
+order: 7000

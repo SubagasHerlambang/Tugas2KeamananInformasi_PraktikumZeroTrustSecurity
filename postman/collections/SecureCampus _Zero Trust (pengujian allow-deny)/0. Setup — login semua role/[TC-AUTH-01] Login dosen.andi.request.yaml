@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "username": "dosen.andi",
+      "password": "{{demoPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200', () => pm.response.to.have.status(200));
+      const j = pm.response.json();
+      pm.test('expires_in = 600 dan refresh_expires_in = 86400', () => { pm.expect(j.expires_in).to.eql(600); pm.expect(j.refresh_expires_in).to.eql(86400); });
+      pm.collectionVariables.set('tokAndi', j.access_token);
+    language: text/javascript
+order: 3000

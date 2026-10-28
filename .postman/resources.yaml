@@ -1,0 +1,15 @@
+# Use this workspace to collaborate
+workspace:
+  id: ac8a6a4b-256e-4697-8a1e-7309355b0fce
+
+localResources:
+  collections:
+    - ../tests/postman/SecureCampus.postman_collection.json
+  environments:
+    - ../tests/postman/SecureCampus.postman_environment.json
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/SecureCampus — Zero Trust (pengujian allow-deny): 5eb7d37c-dfdb-4596-9fbc-dfa16dcaa701

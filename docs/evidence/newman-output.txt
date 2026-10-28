@@ -1,0 +1,192 @@
+newman
+SecureCampus — Zero Trust (pengujian allow/deny)
+Folder 0. Setup — login semua role
+Sub-folder [TC-AUTH-01] Login mhs.001
+  POST http://127.0.0.1:44337/auth/login [200 OK, 1.58kB, 53ms]
+  Pass  HTTP 200
+  Pass  expires_in = 600 dan refresh_expires_in = 86400
+Sub-folder [TC-AUTH-01] Login mhs.002
+  POST http://127.0.0.1:44337/auth/login [200 OK, 1.58kB, 8ms]
+  Pass  HTTP 200
+  Pass  expires_in = 600 dan refresh_expires_in = 86400
+Sub-folder [TC-AUTH-01] Login dosen.andi
+  POST http://127.0.0.1:44337/auth/login [200 OK, 1.56kB, 6ms]
+  Pass  HTTP 200
+  Pass  expires_in = 600 dan refresh_expires_in = 86400
+Sub-folder [TC-AUTH-01] Login dosen.bunga
+  POST http://127.0.0.1:44337/auth/login [200 OK, 1.56kB, 7ms]
+  Pass  HTTP 200
+  Pass  expires_in = 600 dan refresh_expires_in = 86400
+Sub-folder [TC-AUTH-01] Login admin.demo
+  POST http://127.0.0.1:44337/auth/login [200 OK, 1.56kB, 10ms]
+  Pass  HTTP 200
+  Pass  expires_in = 600 dan refresh_expires_in = 86400
+Sub-folder [TC-SVC-01] Token service (POST /auth/service)
+  POST http://127.0.0.1:44337/auth/service [200 OK, 1.4kB, 6ms]
+  Pass  HTTP 200
+  Pass  expires_in = 300
+  -
+  | `Using "atob" is deprecated. Use "require('atob')" ins
+  | tead.`
+  -
+  Pass  role = service, exp-iat = 300
+Folder 1. Autentikasi & token
+Sub-folder [TC-AUTH-02] Password salah
+  POST http://127.0.0.1:44337/auth/login [401 Unauthorized, 1.23kB, 5ms]
+  Pass  HTTP 401
+  Pass  error.code = INVALID_CREDENTIALS
+Sub-folder [TC-AUTH-03] Device tidak terdaftar
+  POST http://127.0.0.1:44337/auth/login [403 Forbidden, 1.25kB, 5ms]
+  Pass  HTTP 403
+  Pass  error.code = DEVICE_NOT_REGISTERED
+Sub-folder [TC-AUTH-04] Device milik user lain
+  POST http://127.0.0.1:44337/auth/login [403 Forbidden, 1.25kB, 8ms]
+  Pass  HTTP 403
+  Pass  error.code = DEVICE_NOT_REGISTERED
+Sub-folder [TC-AUTH-05] Tanpa token
+  GET http://127.0.0.1:44337/nilai [401 Unauthorized, 1.13kB, 4ms]
+  Pass  HTTP 401
+  Pass  error.code = AUTH_REQUIRED
+Sub-folder [TC-AUTH-05] Token rusak
+  GET http://127.0.0.1:44337/nilai [401 Unauthorized, 1.12kB, 4ms]
+  Pass  HTTP 401
+  Pass  error.code = INVALID_TOKEN
+Sub-folder [AC-07] Device tidak ada pada request bisnis
+  GET http://127.0.0.1:44337/nilai [403 Forbidden, 1.15kB, 6ms]
+  Pass  HTTP 403
+  Pass  error.code = DEVICE_NOT_REGISTERED
+Sub-folder [AC-07] Device milik user lain pada request bisnis
+  GET http://127.0.0.1:44337/nilai [403 Forbidden, 1.15kB, 4ms]
+  Pass  HTTP 403
+  Pass  error.code = DEVICE_NOT_REGISTERED
+Sub-folder [AC-05] Refresh (rotasi token)
+  POST http://127.0.0.1:44337/auth/refresh [200 OK, 1.51kB, 4ms]
+  Pass  HTTP 200
+Sub-folder [AC-05] Refresh token lama (sudah dirotasi) ditolak
+  POST http://127.0.0.1:44337/auth/refresh [401 Unauthorized, 1.22kB, 3ms]
+  Pass  HTTP 401
+Sub-folder [TC-AUTH-06] Logout (cabut refresh token)
+  POST http://127.0.0.1:44337/auth/logout [204 No Content, 988B, 3ms]
+  Pass  HTTP 204
+Sub-folder [TC-AUTH-06] Refresh setelah logout ditolak
+  POST http://127.0.0.1:44337/auth/refresh [401 Unauthorized, 1.22kB, 5ms]
+  Pass  HTTP 401
+Sub-folder [TC-SVC-02] Token service: secret salah
+  POST http://127.0.0.1:44337/auth/service [401 Unauthorized, 1.23kB, 5ms]
+  Pass  HTTP 401
+Folder 2. Nilai (policy role + kepemilikan)
+Sub-folder [TC-VAL-01] Mahasiswa baca nilai sendiri
+  GET http://127.0.0.1:44337/nilai [200 OK, 1.6kB, 33ms]
+  Pass  HTTP 200
+  Pass  hanya NIM sendiri
+Sub-folder [TC-VAL-03] Dosen baca kelas sendiri
+  GET http://127.0.0.1:44337/nilai [200 OK, 1.86kB, 7ms]
+  Pass  HTTP 200
+  Pass  hanya CLS-501
+Sub-folder Admin GET /nilai ditolak
+  GET http://127.0.0.1:44337/nilai [403 Forbidden, 1.14kB, 3ms]
+  Pass  HTTP 403
+Sub-folder [TC-VAL-05] Dosen edit nilai valid (butuh jam akses terbuka)
+  PUT http://127.0.0.1:44337/nilai/GRD-501-001 [200 OK, 1.21kB, 10ms]
+  Pass  200 bila dalam jam akses, 403 OUT_OF_ACCESS_HOURS bila di luar
+Sub-folder [TC-VAL-04] Dosen edit nilai kelas lain
+  PUT http://127.0.0.1:44337/nilai/GRD-502-001 [403 Forbidden, 1.14kB, 4ms]
+  Pass  403 (CLASS_NOT_OWNED)
+Sub-folder [TC-VAL-06] Edit nilai final
+  PUT http://127.0.0.1:44337/nilai/GRD-501-003 [409 Conflict, 1.14kB, 4ms]
+  Pass  409 GRADE_FINAL (dalam jam) / 403 (di luar jam)
+Sub-folder Admin edit nilai ditolak
+  PUT http://127.0.0.1:44337/nilai/GRD-501-001 [403 Forbidden, 1.14kB, 3ms]
+  Pass  HTTP 403
+Sub-folder Mahasiswa edit nilai ditolak
+  PUT http://127.0.0.1:44337/nilai/GRD-501-001 [403 Forbidden, 1.14kB, 3ms]
+  Pass  HTTP 403
+Sub-folder [TC-IN-01] Skor invalid (string)
+  PUT http://127.0.0.1:44337/nilai/GRD-501-001 [400 Bad Request, 1.16kB, 7ms]
+  Pass  HTTP 400
+  Pass  error.code = VALIDATION_ERROR
+Sub-folder [TC-IN-01] Skor invalid (>100)
+  PUT http://127.0.0.1:44337/nilai/GRD-501-001 [400 Bad Request, 1.16kB, 7ms]
+  Pass  HTTP 400
+Sub-folder [TC-IN-02] SQL injection pada ID
+  PUT http://127.0.0.1:44337/nilai/GRD-501-001'%20OR%201=1-- [404 Not Found, 1.13kB, 3ms]
+  Pass  tidak ada bypass (400/404)
+Folder 3. Transkrip
+Sub-folder [TC-TR-01] Mahasiswa baca transkrip sendiri
+  GET http://127.0.0.1:44337/transkrip/247006110001 [200 OK, 1.04kB, 4ms]
+  Pass  HTTP 200
+Sub-folder [TC-TR-02] Mahasiswa baca transkrip orang lain (IDOR)
+  GET http://127.0.0.1:44337/transkrip/247006110002 [403 Forbidden, 1.14kB, 3ms]
+  Pass  HTTP 403
+  Pass  tanpa isi transkrip
+Sub-folder [TC-TR-03] Admin baca transkrip NIM 1
+  GET http://127.0.0.1:44337/transkrip/247006110001 [200 OK, 1.04kB, 5ms]
+  Pass  HTTP 200
+Sub-folder [TC-TR-03] Admin baca transkrip NIM 3
+  GET http://127.0.0.1:44337/transkrip/247006110003 [200 OK, 1.22kB, 7ms]
+  Pass  HTTP 200
+Sub-folder Dosen baca transkrip ditolak
+  GET http://127.0.0.1:44337/transkrip/247006110001 [403 Forbidden, 1.14kB, 4ms]
+  Pass  HTTP 403
+Sub-folder [TC-TR-04] Token user ke /transkrip/sinkron
+  POST http://127.0.0.1:44337/transkrip/sinkron [403 Forbidden, 1.15kB, 3ms]
+  Pass  HTTP 403
+  Pass  error.code = SERVICE_TOKEN_REQUIRED
+Sub-folder [TC-TR-04] Token dosen ke /transkrip/sinkron
+  POST http://127.0.0.1:44337/transkrip/sinkron [403 Forbidden, 1.15kB, 3ms]
+  Pass  HTTP 403
+  Pass  error.code = SERVICE_TOKEN_REQUIRED
+Sub-folder [TC-TR-04] Token admin ke /transkrip/sinkron
+  POST http://127.0.0.1:44337/transkrip/sinkron [403 Forbidden, 1.15kB, 7ms]
+  Pass  HTTP 403
+  Pass  error.code = SERVICE_TOKEN_REQUIRED
+Sub-folder Token service ke endpoint user
+  GET http://127.0.0.1:44337/nilai [403 Forbidden, 1.14kB, 4ms]
+  Pass  HTTP 403
+Folder 4. Gateway & route
+Sub-folder [TC-GW-03] Route tidak dikenal
+  GET http://127.0.0.1:44337/admin [404 Not Found, 1.13kB, 2ms]
+  Pass  HTTP 404
+Sub-folder Method tidak diizinkan
+  DELETE http://127.0.0.1:44337/nilai/GRD-501-001 [405 Method Not Allowed, 1.17kB, 2ms]
+  Pass  HTTP 405
+Sub-folder Health gateway
+  GET http://127.0.0.1:44337/health [200 OK, 1.02kB, 2ms]
+  Pass  HTTP 200
+Folder 5. Finalisasi (jalankan TERAKHIR; mengubah data)
+Sub-folder [TC-FIN-02] Dosen finalisasi kelas bukan miliknya
+  POST http://127.0.0.1:44337/kelas/CLS-502/finalisasi [403 Forbidden, 1.14kB, 4ms]
+  Pass  HTTP 403
+  Pass  error.code = CLASS_NOT_OWNED
+Sub-folder Admin finalisasi ditolak
+  POST http://127.0.0.1:44337/kelas/CLS-501/finalisasi [403 Forbidden, 1.14kB, 5ms]
+  Pass  HTTP 403
+Sub-folder [TC-FIN-01] Dosen finalisasi kelas sendiri (CLS-501)
+  POST http://127.0.0.1:44337/kelas/CLS-501/finalisasi [200 OK, 1.21kB, 117ms]
+  Pass  200 (dalam jam) atau 403 (di luar jam)
+  Pass  transcript_sync = success
+Sub-folder Transkrip mhs.001 setelah finalisasi
+  GET http://127.0.0.1:44337/transkrip/247006110001 [200 OK, 1.22kB, 11ms]
+  Pass  HTTP 200
+Sub-folder [TC-FIN-04] Finalisasi ulang -> 409
+  POST http://127.0.0.1:44337/kelas/CLS-501/finalisasi [409 Conflict, 1.14kB, 7ms]
+  Pass  409 GRADE_FINAL (dalam jam) / 403 (di luar jam)
+-----------------------------------------------------------------
+|                         |         executed |           failed |
+--------------------------+------------------+-------------------
+|              iterations |                1 |                0 |
+--------------------------+------------------+-------------------
+|                requests |               46 |                0 |
+--------------------------+------------------+-------------------
+|            test-scripts |               46 |                0 |
+--------------------------+------------------+-------------------
+|      prerequest-scripts |                0 |                0 |
+--------------------------+------------------+-------------------
+|              assertions |               69 |                0 |
+-----------------------------------------------------------------
+| total run duration: 1427ms                                    |
+-----------------------------------------------------------------
+| total data received: 9.98kB (approx)                          |
+-----------------------------------------------------------------
+| average response time: 9ms [min: 2ms, max: 117ms, s.d.: 18ms] |
+-----------------------------------------------------------------

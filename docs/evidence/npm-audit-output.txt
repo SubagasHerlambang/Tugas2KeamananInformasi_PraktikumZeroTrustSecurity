@@ -1,0 +1,7 @@
+# npm audit --omit=dev (backend)
+found 0 vulnerabilities
+
+# npm audit (frontend, termasuk devDependencies)
+found 0 vulnerabilities
+
+tanggal: 2026-10-24T17:23Z

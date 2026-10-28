@@ -1,0 +1,43 @@
+== Login & token ==
+PASS  login 3 role
+PASS  TC-AUTH-02 password salah -> 401 (INVALID_CREDENTIALS)
+PASS  TC-AUTH-03 device tak dikenal -> 403 (DEVICE_NOT_REGISTERED)
+PASS  TC-AUTH-04 device user lain -> 403 (DEVICE_NOT_REGISTERED)
+PASS  TC-AUTH-05 tanpa token -> 401 (AUTH_REQUIRED)
+PASS  TC-AUTH-05 token rusak -> 401 (INVALID_TOKEN)
+PASS  AC-07 device user lain -> 403 (DEVICE_NOT_REGISTERED)
+PASS  AC-07 tanpa device -> 403 (DEVICE_NOT_REGISTERED)
+== Kepemilikan data ==
+PASS  TC-VAL-01 mahasiswa baca nilai -> 200 
+      (hanya NIM sendiri)
+PASS  TC-TR-02 IDOR transkrip NIM lain -> 403 (FORBIDDEN)
+PASS  TC-TR-01 transkrip sendiri -> 200 
+PASS  TC-TR-03 admin baca NIM mana pun -> 200 
+PASS  admin edit nilai ditolak -> 403 (FORBIDDEN)
+PASS  TC-VAL-04 dosen kelas lain -> 403 (CLASS_NOT_OWNED)
+PASS  TC-IN-01 skor string -> 400 (VALIDATION_ERROR)
+PASS  TC-IN-02 SQL injection pada ID -> 404
+== Jam akses, nilai final, finalisasi ==
+PASS  TC-VAL-05 edit nilai valid -> 200 
+PASS  TC-VAL-06 edit nilai final -> 409 (GRADE_FINAL)
+PASS  TC-FIN-02 finalisasi kelas orang lain -> 403 (CLASS_NOT_OWNED)
+PASS  TC-FIN-01 finalisasi kelas sendiri -> 200 
+PASS  transkrip terisi setelah finalisasi -> 200 
+      (entri published tampil)
+PASS  TC-FIN-04 finalisasi ulang -> 409 (GRADE_FINAL)
+== Token service & sinkronisasi ==
+PASS  TC-SVC-01 token service -> 200 
+      (expires_in=300)
+PASS  TC-SVC-02 secret client salah -> 401 (INVALID_CREDENTIALS)
+PASS  TC-TR-04 token mahasiswa ke sinkron -> 403 (SERVICE_TOKEN_REQUIRED)
+PASS  TC-TR-04 token dosen ke sinkron -> 403 (SERVICE_TOKEN_REQUIRED)
+PASS  TC-TR-04 token admin ke sinkron -> 403 (SERVICE_TOKEN_REQUIRED)
+PASS  token service ke endpoint user -> 403 
+== Gateway: route & method ==
+PASS  TC-GW-03 route tak dikenal -> 404 (RESOURCE_NOT_FOUND)
+PASS  method tak diizinkan -> 405 (METHOD_NOT_ALLOWED)
+== Logout & refresh ==
+PASS  logout -> 204 
+PASS  TC-AUTH-06 refresh setelah logout -> 401 
+
+RINGKASAN CURL: 32 PASS, 0 FAIL

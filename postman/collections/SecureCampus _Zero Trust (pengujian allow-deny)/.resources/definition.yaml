@@ -1,0 +1,13 @@
+$kind: collection
+name: SecureCampus — Zero Trust (pengujian allow/deny)
+description: Jalankan folder 0 lebih dulu (login), lalu folder 1-4, terakhir folder 5 (mengubah data). Isi demoPassword & serviceClientSecret pada environment dari hasil `npm run setup` / file .env. Setelah folder 5 jalankan `npm run db:reset` untuk mengulang.
+variables:
+  tokMhs1: ""
+  tokMhs2: ""
+  tokAndi: ""
+  tokBunga: ""
+  tokAdmin: ""
+  tokService: ""
+  refMhs1: ""
+  refMhs1Old: ""
+  tokInvalid: bukan.jwt.valid

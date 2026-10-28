@@ -1,0 +1,15 @@
+$kind: http-request
+url: "{{baseUrl}}/kelas/CLS-501/finalisasi"
+method: POST
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      const inWin = pm.environment.get('expectInAccessWindow') !== 'false';
+      pm.test('200 (dalam jam) atau 403 (di luar jam)', () => pm.expect(pm.response.code).to.eql(inWin ? 200 : 403));
+      if (inWin) pm.test('transcript_sync = success', () => pm.expect(pm.response.json().data.transcript_sync).to.eql('success'));
+    language: text/javascript
+order: 3000

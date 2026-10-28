@@ -1,0 +1,15 @@
+$kind: http-request
+description: Variabel tokInvalid sengaja kosong/rusak.
+url: "{{baseUrl}}/nilai"
+method: GET
+headers:
+  Authorization: Bearer {{tokInvalid}}
+  X-Device-ID: DEV-MHS-001
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 401', () => pm.response.to.have.status(401));
+      pm.test('error.code = INVALID_TOKEN', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_TOKEN'));
+    language: text/javascript
+order: 5000

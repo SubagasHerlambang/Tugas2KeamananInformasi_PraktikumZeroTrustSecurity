@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{baseUrl}}/transkrip/247006110002"
+method: GET
+headers:
+  Authorization: Bearer {{tokMhs1}}
+  X-Device-ID: DEV-MHS-001
+  Content-Type: application/json
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 403', () => pm.response.to.have.status(403));
+      pm.test('tanpa isi transkrip', () => pm.expect(pm.response.json().data).to.be.undefined);
+    language: text/javascript
+order: 2000

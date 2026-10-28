@@ -1,0 +1,10 @@
+name: SecureCampus Lokal
+values:
+  - key: baseUrl
+    value: 'http://127.0.0.1:3000'
+  - key: demoPassword
+    value: ''
+  - key: serviceClientSecret
+    value: ''
+  - key: expectInAccessWindow
+    value: 'true'

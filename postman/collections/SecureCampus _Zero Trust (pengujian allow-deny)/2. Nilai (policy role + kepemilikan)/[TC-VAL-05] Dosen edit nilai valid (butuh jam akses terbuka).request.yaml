@@ -1,0 +1,20 @@
+$kind: http-request
+url: "{{baseUrl}}/nilai/GRD-501-001"
+method: PUT
+headers:
+  Authorization: Bearer {{tokAndi}}
+  X-Device-ID: DEV-DOSEN-001
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "score": 85
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const inWin = pm.environment.get('expectInAccessWindow') !== 'false';
+      pm.test('200 bila dalam jam akses, 403 OUT_OF_ACCESS_HOURS bila di luar', () => { if (inWin) pm.response.to.have.status(200); else { pm.response.to.have.status(403); pm.expect(pm.response.json().error.code).to.eql('OUT_OF_ACCESS_HOURS'); } });
+    language: text/javascript
+order: 4000
